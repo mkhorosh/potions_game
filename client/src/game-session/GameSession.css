@@ -1,0 +1,19 @@
+.wrapper {
+  display: grid;
+  background-color: #D7BBA5;
+  width: 100%; 
+  height: 100vh;
+  grid-auto-flow: column;
+}
+
+.left-bar {
+    /* background-color: green; */
+}
+
+.side-bar {
+    /* background-color: red; */
+}
+
+.game-zone {
+    /* background-color: blue; */
+}
