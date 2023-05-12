@@ -13,6 +13,14 @@ const io = socketio(server)
 
 app.use(cors())
 
+// const items = ['lala', 'привет'];
+
+// app.get("/", async (req, res) => {
+
+//     res.send(items);
+// })
+
+
 io.on('connection', socket => {
     socket.on('join', (payload, callback) => {
         let numberOfUsersInRoom = getUsersInRoom(payload.room).length
@@ -35,6 +43,9 @@ io.on('connection', socket => {
 
     socket.on('initGameState', gameState => {
         const user = getUser(socket.id)
+        console.log("server");
+        console.log(user);
+        console.log(gameState);
         if (user)
             io.to(user.room).emit('initGameState', gameState)
     })
@@ -51,21 +62,21 @@ io.on('connection', socket => {
         callback()
     })
 
-    socket.on('disconnect', () => {
+    socket.on('disconnected', () => {
         const user = removeUser(socket.id)
         if (user)
             io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) })
     })
 })
 
-//serve static assets in production
-if (process.env.NODE_ENV === 'production') {
-    //set static folder
-    app.use(express.static('client/build'))
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-    })
-}
+// //serve static assets in production
+// if (process.env.NODE_ENV === 'production') {
+//     //set static folder
+//     app.use(express.static('client/build'))
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+//     })
+// }
 
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

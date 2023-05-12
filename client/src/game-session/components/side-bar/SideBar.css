@@ -1,0 +1,8 @@
+.side-bar{
+    display: grid;
+    justify-content:end;
+}
+
+.deck{
+    justify-content:end;
+}

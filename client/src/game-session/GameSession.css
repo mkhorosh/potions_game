@@ -15,5 +15,41 @@
 }
 
 .game-zone {
-    /* background-color: blue; */
+    background-color: blue;
+}
+
+.Card {
+  width: 6rem;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.player1Deck {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.player1Deck>img {
+  transition: transform 350ms;
+}
+
+.player1Deck>img:hover {
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+.player2Deck {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.player2Deck>img {
+  transition: transform 350ms;
+}
+
+.player2Deck>img:hover {
+  transform: scale(1.08);
+  opacity: 1;
 }

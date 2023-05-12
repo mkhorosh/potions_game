@@ -1,22 +1,28 @@
-import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Slide, Typography } from '@mui/material';
 import React from 'react';
 
-export const RulesModal = ({isOpen, onClose}) => {
+export const RulesModal = ({ isOpen, onClose }) => {
+
+    const Transition = React.forwardRef(function Transition(props, ref) {
+        return <Slide direction="up" ref={ref} {...props} />;
+    });
 
     return (
         <Dialog
             open={isOpen}
             onClose={onClose}
+            // TransitionComponent={Transition}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+
         >
-            <DialogTitle id="alert-dialog-title">
+
+            <DialogContent sx={{ backgroundColor: "#FEF9E6", }}><DialogTitle id="alert-dialog-title">
                 <Typography sx={{
                     // fontSize: "24px",
                     // lineHeight: "33px"
                 }}>Правила игры</Typography>
             </DialogTitle>
-            <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     <Box component="" sx={{
                         mt: 3, display: 'flex',

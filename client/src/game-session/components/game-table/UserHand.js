@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { Baraja } from 'react-baraja-js';
 // import { ReactComponent as ReactLogo } from './card2.svg';
-import { ReactSVG } from "react-svg";
+// import { ReactSVG } from "react-svg";
 import { ReactComponent as Logo } from "../../../asserts/card2.svg";
 
 
@@ -27,7 +27,7 @@ export const UserHand = () => {
             {/* {cards.map((item) => {
                     <img src={item.imageSrc} alt="card"></img>
                 })} */}
-            < img src={"logo2"} alt="card" ></ img>
+            {/* < img src={"logo2"} alt="card" ></ img> */}
             {/* <ReactLogo /> */}
             <Logo />
             {/* <ReactSVG src={logo} /> */}

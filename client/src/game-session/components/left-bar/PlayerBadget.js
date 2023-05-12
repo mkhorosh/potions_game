@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, Typography, Checkbox, Toolbar, Box, Chip, IconButton, Badge } from '../../../../node_modules/@mui/material/index';
 
-export const PlayerBadget = () => {
+export const PlayerBadget = ({label, points}) => {
 
     return (
         <>
@@ -12,10 +12,18 @@ export const PlayerBadget = () => {
                 backgroundColor: "#FEF9E6",
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
                 alignItems: "center",
+                border: "1px solid #D7BBA5",
+                borderRadius: "4px",
             }}>
-                <span className="dot" > 5 </span>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: "center",
+}}>
+                    <span className="dot" > {points} </span>
 
                 <Typography gutterBottom variant="h5" component="div"
                     sx={{
@@ -24,8 +32,10 @@ export const PlayerBadget = () => {
                         lineHeight: "25px",
                     }}
                 >
-                    {"player-name"}
+                    {label}
                 </Typography>
+                </Box>
+                
 
             </Box>
         </>

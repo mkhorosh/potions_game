@@ -1,14 +1,13 @@
-import { Box, Button, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { StyledButton } from "../common/style/StyledButton";
+import { useState } from "react";
+import { makeid } from '../utilits/codeGenerator'
 
 export const GameMenu = () => {
 
-    let navigate = useNavigate();
+    const [roomCode, setRoomCode] = useState('');
 
-    const handleStartGame = () => {
-        let path = `/game`;
-        navigate(path);
-    }
 
     return (
         <Box style={{ backgroundColor: "#557A4F", }}
@@ -18,8 +17,16 @@ export const GameMenu = () => {
             }}
 
         >
-            <Typography variant="h1">Меню</Typography>
-            <Button variant="contained" onClick={handleStartGame}>Начать игру</Button>
+            <Typography variant="h1" sx={{ fontSize: "36px", color: "#C3DFB1", mb: 4 }}>Выберите режим игры:</Typography>
+
+            <div className='homepage-join'>
+                <TextField type='text' placeholder='Введите код' sx={{ color: "#C3DFB1", mr:3 }} onChange={(event) => setRoomCode(event.target.value)} />
+                <Link to={`/play?roomCode=${roomCode}`}><StyledButton variant="contained">Присоединиться к игре</StyledButton></Link>
+            </div>
+
+            <Typography variant="h1" sx={{ fontSize: "30px", color: "#C3DFB1", mb: 1 }}>или</Typography>
+            <Link to={`/play?roomCode=${makeid(5)}`}><StyledButton variant="contained">Создать игру</StyledButton></Link>
+
         </Box >
     );
 }
