@@ -1,33 +1,90 @@
-const express = require('express')
-const socketio = require('socket.io')
-const http = require('http')
+const authRoute = require('./src/Auth.router');
+
+const app = require("express")();
+const server = require("http").createServer(app);
+
+const passport = require("passport");
+const passportJwt = require("passport-jwt");
+const JwtStrategy = passportJwt.Strategy;
+const ExtractJwt = passportJwt.ExtractJwt;
+const bodyParser = require("body-parser");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv").config();
+
 const cors = require('cors')
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./src/users')
-const path = require('path')
 
-const PORT = process.env.PORT || 5000
-
-const app = express()
-const server = http.createServer(app)
-const io = socketio(server)
-
+// const path = require('path')
 app.use(cors())
 
-// const items = ['lala', 'привет'];
+if (!process.env.PORT) {
+    process.exit(1);
+}
 
-// app.get("/", async (req, res) => {
+const jwtSecret = process.env.JWT_SECRET;
+const PORT = process.env.PORT;
 
-//     res.send(items);
-// })
+app.use(bodyParser.json());
+app.use("/auth", authRoute);
 
+app.get(
+    "/self",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+        if (req.user) {
+            res.send(req.user);
+        } else {
+            res.status(401).end();
+        }
+    },
+);
+
+const jwtDecodeOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: jwtSecret,
+    issuer: "accounts.examplesoft.com",
+    audience: "yoursite.net",
+};
+
+passport.use(
+    new JwtStrategy(jwtDecodeOptions, (payload, done) => {
+        return done(null, payload.data);
+    }),
+);
+
+
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
+const { authRouter } = require("./src/Auth.router");
+const io = require('socket.io')(server,
+    {
+        cors: {
+            origin: "http://localhost:3000",
+            // methods: ["GET", "POST"],
+            // allowedHeaders: ["my-custom-header"],
+            credentials: true
+        }
+    }
+);
+
+io.engine.use((req, res, next) => {
+    // console.log(req._query);
+    const isHandshake = (req._query.sid === undefined);
+    if (isHandshake) {
+        console.log("yes");
+        passport.authenticate("jwt", { session: false })(req, res, next);
+    } else {
+        console.log("не надо");
+        next();
+    }
+});
 
 io.on('connection', socket => {
     socket.on('join', (payload, callback) => {
+        console.log(payload);
         let numberOfUsersInRoom = getUsersInRoom(payload.room).length
 
         const { error, newUser } = addUser({
             id: socket.id,
-            name: numberOfUsersInRoom === 0 ? 'Player 1' : 'Player 2',
+            name: payload.username,
             room: payload.room
         })
 

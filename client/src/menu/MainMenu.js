@@ -4,6 +4,7 @@ import { RulesModal } from './RulesModal';
 import { useNavigate } from 'react-router-dom';
 import './MainMenu.css';
 import { StyledButton } from '../common/style/StyledButton';
+import Header from '../common/Header';
 
 
 export const MainMenu = () => {
@@ -28,6 +29,7 @@ export const MainMenu = () => {
             }}
 
         >
+            <Header/>
             <Box sx={{mt:12,}}>
                 <h1 className='main-title'>Зельеварение</h1>
             </Box>

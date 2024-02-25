@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "marina",
+      "password": "123"
+    },
+    {
+      "id": 2,
+      "username": "julia",
+      "password": "123"
+    },
+    {
+      "id": 3,
+      "password": "$2a$12$7eICx14GZGZWoLJwDKdbEug5Z45GostBuXPkz/g4o1LuR1/aJMo4i",
+      "username": "123"
+    },
+    {
+      "password": "$2a$12$RxIGp3Ik.t3nqkeUOrTlNOfxbTje6pn/aHQVhv534/bSRUTPzOEYO",
+      "username": "ole",
+      "id": "1px"
+    }
+  ]
+}
