@@ -13,7 +13,6 @@ const dotenv = require("dotenv").config();
 
 const cors = require('cors')
 
-// const path = require('path')
 app.use(cors())
 
 if (!process.env.PORT) {
@@ -51,79 +50,91 @@ passport.use(
     }),
 );
 
+const { createRoom, getRoom, getUsersInRoom, addUser2Room, isRoomFull, startGame, getRoomState,
+    drawCard, isGameOver, isGameStarted, getWinner, playElement, playRecipe } = require('./src/rooms');
 
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 const { authRouter } = require("./src/Auth.router");
-const io = require('socket.io')(server,
+var io;
+var getIOInstance = function () {
+    return io;
+};
+//TODO var is dangerous
+io = require('socket.io')(server,
     {
         cors: {
             origin: "http://localhost:3000",
-            // methods: ["GET", "POST"],
-            // allowedHeaders: ["my-custom-header"],
             credentials: true
         }
     }
 );
 
 io.engine.use((req, res, next) => {
-    // console.log(req._query);
     const isHandshake = (req._query.sid === undefined);
     if (isHandshake) {
-        console.log("yes");
         passport.authenticate("jwt", { session: false })(req, res, next);
     } else {
-        console.log("не надо");
         next();
     }
 });
 
 io.on('connection', socket => {
+
     socket.on('join', (payload, callback) => {
-        console.log(payload);
-        let numberOfUsersInRoom = getUsersInRoom(payload.room).length
+        const roomId = payload.room;
+        const gameOptions = payload.options;
+        const gamePrivacy = payload.privacy;
+        if (roomId.length !== 5) {
+            return callback("invalid code");
+        }
+        if (!getRoom(roomId)) {
+            createRoom(roomId, gameOptions, gamePrivacy);
+        }
+        if (!isRoomFull(roomId)) {
+            addUser2Room(roomId, payload.username);
+            socket.join(roomId);
+            io.to(roomId).emit('usersInRoom', getUsersInRoom(roomId));
+        }
 
-        const { error, newUser } = addUser({
-            id: socket.id,
-            name: payload.username,
-            room: payload.room
-        })
+        if (isRoomFull(roomId) && isGameStarted(roomId)) {
+            return callback("room is full");
+        } else if (isRoomFull(roomId)) {
+            startGame(roomId, getIOInstance);
+            io.to(roomId).emit('updateGameState', getRoomState(roomId));
+        }
+        callback();
+    });
 
-        if (error)
-            return callback(error)
-
-        socket.join(newUser.room)
-
-        io.to(newUser.room).emit('roomData', { room: newUser.room, users: getUsersInRoom(newUser.room) })
-        socket.emit('currentUserData', { name: newUser.name })
-        callback()
+    socket.on('drawCard', payload => {
+        drawCard(payload.room, payload.username, getIOInstance);
+        io.to(payload.room).emit('updateGameState', getRoomState(payload.room));
+        if (isGameOver(payload.room)) {
+            io.to(payload.room).emit('gameOver', getWinner(payload.room));
+            //TODO statistics
+        }
     })
 
-    socket.on('initGameState', gameState => {
-        const user = getUser(socket.id)
-        console.log("server");
-        console.log(user);
-        console.log(gameState);
-        if (user)
-            io.to(user.room).emit('initGameState', gameState)
+    socket.on('playElement', payload => {
+        playElement(payload.room, payload.username, payload.card, getIOInstance);
+        io.to(payload.room).emit('updateGameState', getRoomState(payload.room));
     })
 
-    socket.on('updateGameState', gameState => {
-        const user = getUser(socket.id)
-        if (user)
-            io.to(user.room).emit('updateGameState', gameState)
+    socket.on('playRecipe', payload => {
+        playRecipe(payload.room, payload.username, payload.card, getIOInstance);
+        io.to(payload.room).emit('updateGameState', getRoomState(payload.room));
     })
 
     socket.on('sendMessage', (payload, callback) => {
-        const user = getUser(socket.id)
-        io.to(user.room).emit('message', { user: user.name, text: payload.message })
+        io.to(payload.room).emit('message', { user: payload.username, text: payload.message })
         callback()
     })
 
     socket.on('disconnected', () => {
-        const user = removeUser(socket.id)
+        // const user = removeUser(socket.id);
+        const user = null;
         if (user)
             io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) })
     })
+
 })
 
 // //serve static assets in production

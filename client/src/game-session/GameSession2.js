@@ -3,7 +3,6 @@ import './GameSession.css';
 import { LeftBar } from './components/left-bar/LeftBar';
 import { SideBar } from './components/side-bar/SideBar';
 import { GameTable } from './components/game-table/GameTable';
-import queryString from 'query-string';
 import io from 'socket.io-client';
 import { StyledButton } from '../common/style/StyledButton';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -20,8 +19,6 @@ import B3 from "./B3.png"
 import C2 from "./C2.png"
 import D4 from "./D4.png"
 import E2 from "./E2.png"
-
-
 
 let socket
 const ENDPOINT = 'http://localhost:5000'
@@ -91,7 +88,6 @@ export const GameSession2 = (props) => {
     }, [player1Deck])
 
     useEffect(() => {
-        console.log('i fire once');
         //shuffle PACK_OF_CARDS array
         const shuffledCards = shuffleArray(packOfCards)
         console.log("shuffledCards", shuffledCards);

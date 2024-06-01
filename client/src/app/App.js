@@ -4,9 +4,11 @@ import { GameSession } from '../game-session/GameSession';
 import { MainMenu } from '../menu/MainMenu';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { GameMenu } from '../menu/GameMenu';
-import AuthPage from '../menu/AuthPage';
-import RegisterPage from '../menu/RegisterPage';
+import AuthPage from '../auth/AuthPage';
+import RegisterPage from '../auth/RegisterPage';
 import axios from 'axios';
+import { CodeGameMenu } from '../menu/CodeGameMenu';
+import { RoomsList } from '../menu/RoomsList';
 
 
 function App() {
@@ -18,40 +20,34 @@ function App() {
     const dataObj = JSON.parse(data);
     console.log(dataObj);
 
-    if (!dataObj) {
-      setUser(null);
-    } else {
-      axios.get('http://localhost:5000/self', {
+    const loadAsyncStuff = async () => {
+      const response = await axios.get('http://localhost:5000/self', {
         headers: {
           authorization: `bearer ${dataObj.token}`
         }
-      }).then(function (response) {
-        console.log(response);
-        if (response.status === 200) {
-          setUser(response);
-        } else {
-        }
-      })
-        .catch(function (error) {
-          console.log(error);
-        });
+      });
+      if (response.status === 200) {
+        setUser(response);
+      } else {
+      }
+    }
+
+    if (!dataObj) {
+      setUser(null);
+    } else {
+      loadAsyncStuff();
     }
   }, []);
 
-  if (!user) {
-    return (
-      <Routes>
-        <Route path='/login' element={<AuthPage />} />
-        <Route path='/register' element={<RegisterPage />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    )
-  }
   return (
     <Routes>
-      <Route path="/start" element={<MainMenu />} />
+      <Route path="/start" element={<MainMenu setUser={setUser} />} />
       <Route path="/menu" element={<GameMenu />} />
+      <Route path="/friendly-game" element={<CodeGameMenu />} />
+      <Route path="/rooms-list" element={<RoomsList/>}/>
       <Route path='/play' exact element={<GameSession />} />
+      <Route path='/login' element={<AuthPage setUser={setUser} />} />
+      <Route path='/register' element={<RegisterPage />} />
       <Route path="*" element={<Navigate to="/start" replace />} />
     </Routes>
 

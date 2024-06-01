@@ -1,7 +1,4 @@
 import React from 'react';
-import { ElementsStorage } from './ElementsStorage';
-import { RivalHand } from './RivalHand';
-import UserHand from './UserHand';
 import { Spinner } from '../../../common/Spinner';
 
 export const GameTable = ({ player2Deck, onCardPlayedHandler, CardBack, turn, player1Deck }) => {
@@ -30,16 +27,10 @@ export const GameTable = ({ player2Deck, onCardPlayedHandler, CardBack, turn, pl
                         alt="card"
                         key={i}
                         className='Card'
-                        // onClick={() => onCardPlayedHandler(item)}
-                        // src={require(`../assets/cards-front/${item}.png`).default}
                         src={CardBack}
                     />
                 ))}
             </div>
-
-            {/* <RivalHand /> */}
-            {/* <ElementsStorage /> */}
-            {/* <UserHand /> */}
         </div>
     )
 };

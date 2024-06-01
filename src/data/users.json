@@ -19,6 +19,16 @@
       "password": "$2a$12$RxIGp3Ik.t3nqkeUOrTlNOfxbTje6pn/aHQVhv534/bSRUTPzOEYO",
       "username": "ole",
       "id": "1px"
+    },
+    {
+      "password": "$2a$12$u/s4DI.SOv7dwVYXU.4tuuiLQ4U1OWq4b94IEQUtDMOlajkimaBde",
+      "username": "mar",
+      "id": "1px"
+    },
+    {
+      "password": "$2a$12$JEVC7E.UcUkB06o9mPo0u.3OsCeia57fT1jkfltcnLGhaYGob0B/K",
+      "username": "qwerty",
+      "id": "1px"
     }
   ]
 }

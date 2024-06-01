@@ -1,11 +1,10 @@
 import React from 'react';
-import { Card, CardContent, Typography, Checkbox, Toolbar, Box, Chip, IconButton, Badge } from '../../../../node_modules/@mui/material/index';
+import { Typography, Box } from '../../../../node_modules/@mui/material/index';
 
-export const PlayerBadget = ({label, points}) => {
+export const PlayerBadget = ({ label, points }) => {
 
     return (
         <>
-            
             <Box sx={{
                 width: "293px",
                 height: "68px",
@@ -22,21 +21,18 @@ export const PlayerBadget = ({label, points}) => {
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: "center",
-}}>
-                    <span className="dot" > {points} </span>
-
-                <Typography gutterBottom variant="h5" component="div"
-                    sx={{
-                        fontWeight: "600",
-                        fontSize: "18px",
-                        lineHeight: "25px",
-                    }}
-                >
-                    {label}
-                </Typography>
+                }}>
+                    <span className="dot" > {points ? points : 0} </span>
+                    <Typography gutterBottom variant="h5" component="div"
+                        sx={{
+                            fontWeight: "600",
+                            fontSize: "18px",
+                            lineHeight: "25px",
+                        }}
+                    >
+                        {label}
+                    </Typography>
                 </Box>
-                
-
             </Box>
         </>
 
