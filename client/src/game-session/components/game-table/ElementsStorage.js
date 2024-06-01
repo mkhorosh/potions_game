@@ -4,19 +4,18 @@ import { Box, Grid } from '../../../../node_modules/@mui/material/index';
 export const ElementsStorage = ({ elements }) => {
 
     const convertElement = (str) => {
-        if (str === "1") {
+        if (str === "fire") {
             return "огненный свет";
-        } else if (str === "2") {
+        } else if (str === "water") {
             return "родниковая вода";
-        } else if (str === "3") {
+        } else if (str === "herb1") {
             return "цветок папоротника";
-        } else if (str === "4") {
+        } else if (str === "bat") {
             return "крыло летучей мыши";
-        } else if (str === "5") {
+        } else if (str === "herb2") {
             return "беладонна";
         }
     }
-
 
     return (
         <>

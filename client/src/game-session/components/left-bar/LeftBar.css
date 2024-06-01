@@ -64,10 +64,11 @@ margin-right: 10px;
 	margin-bottom: 45px;
 }
 .chat-text{
-	position: fixed;
+	/* position: fixed; */
 	bottom: 0px;
 	height: 45px;
-	width: inherit;
+	/* width: inherit; */
+	width: fit-content;
 }
 /* .chat-text input{
 	width: inherit; */
